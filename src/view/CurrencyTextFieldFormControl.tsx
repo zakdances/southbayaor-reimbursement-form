@@ -30,25 +30,29 @@ import './../App.css';
 import dayjs from 'dayjs';
 
 function CurrencyTextFieldFormControl(props: any) {
-    const { fullWidth, label, value, onChange } = props;
+    const { fullWidth, label, value, onChange, margin = "none", helperText = '' } = props;
 
     return (
-        <FormControl  variant="outlined" fullWidth={fullWidth}>
+        <FormControl variant="outlined" fullWidth={fullWidth} size='medium' margin={margin}>
           <InputLabel htmlFor="outlined-adornment-password">{label}</InputLabel>
-          <OutlinedInput
+          <FilledInput 
             id="outlined-adornment-password"
             // type={showPassword ? 'text' : 'password'}
-            endAdornment={
-              <InputAdornment position="end">
+            startAdornment={
+              <InputAdornment position="start">
 
                   <AttachMoney></AttachMoney>
          
               </InputAdornment>
             }
-            label={label}
+            // label={label}
             value={value}
             onChange={onChange}
+          
           />
+          <FormHelperText id="outlined-weight-helper-text" 
+          sx={{opacity: 1, pointerEvents: "none"}}
+          >{helperText}</FormHelperText>
         </FormControl>
     )
 }

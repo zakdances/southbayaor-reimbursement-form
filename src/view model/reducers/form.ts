@@ -1,13 +1,21 @@
 import { createAction, createReducer, AnyAction, PayloadAction } from '@reduxjs/toolkit'
+// import htmlFileLists from '../../util/htmlFileLists';
 // import JargonautCard, { JargonautCardData } from '../../model/JargonautCard'
+
+interface FileInput {
+  file?: string
+}
 
 interface formState {
   payTo: string,
-  dateSubmitted?: Date,
+  dateSubmitted?: number,
   mailingAddress?: string,
+  city?: string,
+  stateName?: string,
+  zip?: string,
   conferenceName?: string,
-  dateStarted?: Date,
-  dateEnded?: Date,
+  dateStarted?: number,
+  dateEnded?: number,
   hotel?: string,
   airfare?: string,
   luggage?: string,
@@ -16,19 +24,26 @@ interface formState {
   misc?: string,
   confirm: boolean,
   signature?: string,
+  // fileList?: FileList,
+  // fileLists: (string | undefined)[]
 }
 
 const initialState = {
   payTo: "",
+  // dateSubmitted: 0,
   confirm: false,
+  // fileLists: [undefined]
 } as formState;
 
 export const editPayTo = createAction<string>('editPayTo', );
-export const editDateSubmitted = createAction<Date>('editDateSubmitted', );
+export const editDateSubmitted = createAction<number>('editDateSubmitted', );
 export const editMailingAddress = createAction<string>('editMailingAddress', );
+export const editCity = createAction<string>('editCity', );
+export const editStateName = createAction<string>('editStateName', );
+export const editZip = createAction<string>('editZip', );
 export const editConferenceName = createAction<string>('editConferenceName', );
-export const editDateStarted = createAction<Date>('editDateStarted', );
-export const editDateEnded = createAction<Date>('editDateEnded', );
+export const editDateStarted = createAction<number>('editDateStarted', );
+export const editDateEnded = createAction<number>('editDateEnded', );
 export const editHotel = createAction<string>('editHotel', );
 export const editAirfare = createAction<string>('editAirfare', );
 export const editLuggage = createAction<string>('editLuggage', );
@@ -37,6 +52,8 @@ export const editGroundTransportation = createAction<string>('editGroundTranspor
 export const editMisc = createAction<string>('editMisc', );
 export const editConfirm = createAction('editConfirm', );
 export const editSignature = createAction<string>('editSignature', );
+// export const editFileList = createAction<FileList>('editFileList', );
+// export const editFileLists = createAction<{fileName: string | undefined, index: number}>('editFileLists', );
 
 // export const removejCard = createAction<string>('removejCard')
 
@@ -50,6 +67,15 @@ const formReducer = createReducer(initialState, (builder) => {
     })
     .addCase(editMailingAddress, (state, action) => {
       state.mailingAddress = action.payload
+    })
+    .addCase(editCity, (state, action) => {
+      state.city = action.payload
+    })
+    .addCase(editStateName, (state, action) => {
+      state.stateName = action.payload
+    })
+    .addCase(editZip, (state, action) => {
+      state.zip = action.payload
     })
     .addCase(editConferenceName, (state, action) => {
       state.conferenceName = action.payload
@@ -76,14 +102,21 @@ const formReducer = createReducer(initialState, (builder) => {
       state.groundTransportation = action.payload
     })
     .addCase(editMisc, (state, action) => {
-      state.misc = action.payload
+      state.misc = action.payload;
     })
     .addCase(editConfirm, (state, action) => {
       state.confirm = !state.confirm;
     })
     .addCase(editSignature, (state, action) => {
-      state.signature = action.payload
+      state.signature = action.payload;
     })
+    // .addCase(editFileList, (state, action) => {
+    //   state.fileList = action.payload;
+    // })
+    // .addCase(editFileLists, (state, action) => {
+    //   const huh = action.payload;
+    //   state.fileLists[huh.index] = huh.fileName;
+    // })
 })
 
 export default formReducer;

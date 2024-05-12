@@ -3,17 +3,26 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import CssBaseline from '@mui/material/CssBaseline';
 import { Provider } from 'react-redux';
-import store from './view model/store';
+import store, { FileListsProvider } from './view model/store';
+import { ThemeProvider } from '@mui/material';
+import mainTheme from './theme';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
+
 root.render(
   <React.StrictMode>
-    <Provider store={store}>
-    <App />
-    </Provider>
+    <ThemeProvider theme={mainTheme}>
+      <CssBaseline />
+      <FileListsProvider>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </FileListsProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 

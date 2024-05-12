@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import logo from './logo.svg';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -21,8 +23,16 @@ import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import AccountCircle from '@mui/icons-material/AccountCircle';
 import AttachMoney from '@mui/icons-material/AttachMoney';
+
+import axios from 'axios';
+
+// import ReceiptLong from '@mui/icons-material/ReceiptLong';
+import {
+  MeetingRoom, MeetingRoomOutlined, AccountCircleOutlined, Receipt, ReceiptLong, ReceiptLongOutlined, ReceiptOutlined,
+  AttachMoneyOutlined,
+  AccountBoxTwoTone
+} from '@mui/icons-material';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -34,9 +44,32 @@ import { editAirfare, editConferenceName, editConfirm, editDateSubmitted, editGr
 import dayjs from 'dayjs';
 import CurrencyTextFieldFormControl from './view/CurrencyTextFieldFormControl';
 import numbro from 'numbro';
-  
+import { Avatar, CardHeader, Divider } from '@mui/material';
+import FormSection1 from './view/FormSection1';
+import FormSection2 from './view/FormSection2';
+import FormSection3 from './view/FormSection3';
+import FormCard1 from './view/FormCard1';
+import FormCard2 from './view/FormCard2';
+import FormCard3 from './view/FormCard3';
+import InfoCard from './view/InfoCard';
+import FormCard4 from './view/FormCard4';
+import { editDialogMessage, editDialogOpen } from './view model/reducers/dialog';
+import { FileListsContext } from './view model/store';
+import MainAppBar from './view/MainAppBar';
+// import htmlFileLists from './util/htmlFileLists';
+
+
+// const local_handle_url = "http://localhost:8000/handle_form.php";
+const test_server_url = "https://us-west1-southbayaor-422114.cloudfunctions.net/function-hello-world";
+// const test_server_url = "http://localhost:8080/";
+const maxWidth = 600;
+
 function FormView() {
   const dispatch = useAppDispatch();
+  const theme = useTheme();
+  const smBreakpoint = useMediaQuery(theme.breakpoints.up('sm'));
+
+  const formState = useAppSelector(state => state.form);
 
   const val1 = useAppSelector(state => state.form.payTo);
   const val2 = useAppSelector(state => state.form.dateSubmitted);
@@ -55,168 +88,199 @@ function FormView() {
   const val13 = useAppSelector(state => state.form.confirm);
   const val14 = useAppSelector(state => state.form.signature);
 
-  const values = [val7, val8, val9, val10, val11, val12];
-  const numValues = values.map((v) => v ? numbro.unformat(v) : undefined);
+  const { contextState, contextDispatch } = useContext(FileListsContext);
+  // const fileInputs = useAppSelector(state => state.form.fileInputs);
 
-  // console.log("numValues: " + numValues);
-  
-  const areAllUndefinedOrNull = numValues.every(v => typeof v === "number");
-  
-  const total = numValues.reduce((p: number, v) => {
-    return typeof v === 'number' ? p + v : p;
-  }, 0);
+  // const values = [val7, val8, val9, val10, val11, val12];
+  // const numValues = values.map((v) => v ? numbro.unformat(v) : undefined);
+
+  // const areAllUndefinedOrNull = numValues.every(v => typeof v === "number");
+
+  // const total = numValues.reduce((p: number, v) => {
+  //   return typeof v === 'number' ? p + v : p;
+  // }, 0);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const target = e.target as typeof e.target & {
-      [key: string]: { value: string };
-    };
-    alert(`The name you entered was: ${target["payTo"].value}`)
+    const formData = new FormData();
+
+    // const target = e.target as typeof e.target & {
+    //   [key: string]: { value: string }
+    // };
+    const files = e.currentTarget.files;
+    // console.log("files");
+
+    // console.log(files);
+    // console.log(Object.entries(target));
+    let total: undefined | number = undefined;
+    const newFormState = Object.entries(formState).reduce((p: any, [k, v]) => {
+
+      if (["hotel", "airfare", "luggage", "mileage", "groundTransportation", "misc"].includes(k)) {
+        let numToAdd = v ? numbro.unformat(v) : undefined;
+        if (numToAdd !== undefined) {
+          total = total === undefined ? numToAdd : total + numToAdd;
+        }
+      }
+
+      // if (k == 'fileLists') {
+      //   v.forEach((v) => {
+      //     if (v) {
+      //       for (let i = 0; i < files.length; i++) {
+      //         formData.append(input.name, files[i]);
+      //       }
+      //     }
+      //   });
+      // }
+
+      p[k] = v;
+
+      return p;
+    }, {});
+    if (total !== undefined) newFormState['total'] = total;
+
+    // if (files && files.length > 0) {
+    //   newFormState['files'] = files;
+    // }
+
+    Object.entries(newFormState).forEach(([key, value]) => {
+      formData.set(key, value as any);
+    });
+    // formData.set('files', htmlFileLists as any);
+    contextState.fileLists.forEach(v => {
+      if (v) {
+        const file = v.item(0);
+        if (file) {
+          formData.append('files', file, file.name);
+        }
+
+      }
+    })
+
+    // formData'fileLists'] = htmlFileLists;
+    dispatch(editDialogMessage({ text: "Please wait, submitting form...", showSpinner: true }));
+    dispatch(editDialogOpen(true));
+
+    axios.post(test_server_url, formData)
+      .then(json => {
+        console.log(json);
+        dispatch(editDialogMessage({ text: "Form submitted succesfully! Thank you." }));
+        dispatch(editDialogOpen(true));
+      })
+      .catch(function (error) {
+        console.log(error);
+        dispatch(editDialogMessage({ text: "There was an error." }));
+        dispatch(editDialogOpen(true));
+      });
+
+    // fetch(test_server_url, {
+    //   method: 'POST',
+    //   body: formData,
+    // })
+    //   .then(res => res.json())
+    //   .then(json => {
+    //     console.log(json);
+    //     dispatch(editDialogOpen(true));
+    //   })
+
+    // alert(`The name you entered was: ${target["payTo"].value}`)
   }
 
   return (
-    <div className="FormView">
-      <form action="http://localhost:8000/handle_form.php" method="post" onSubmit={handleSubmit}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-      <Card sx={{ minWidth: 275, maxWidth: 675, margin: "16px auto", borderTop: "8px solid #0D47A1" }}>
-      <CardContent>
-        
-        <Typography variant="h5" color="text.primary" gutterBottom>
-          Reimbursement Form
-        </Typography>
+    <div className="FormView" style={{ paddingTop: 0, paddingBottom: 32 }}>
+      <form method="post" onSubmit={handleSubmit}>
+        <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-        <Stack gap={2}>
-
-        <TextField id="outlined-basic" name="payTo" label="Pay To" variant="outlined" margin="normal" 
-        value={val1 ?? ""} 
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editPayTo(event.target.value));
-        }}
-        />
+          <MainAppBar />
 
 
-        {/* <label style={{textAlign: "left"}}>Date Submitted</label> */}
-        <DatePicker label="Date Submitted"
-        value={val2 ? dayjs(val2) : undefined} 
-        onChange={(val) => {
-          if (val) dispatch(editDateSubmitted(val.toDate()));
-        }}
-        />
-
-        <TextField id="outlined-basic" label="Mailing Address" variant="outlined" margin="normal" multiline
-          maxRows={2}
-          value={val3 ?? ""}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editMailingAddress(event.target.value));
-        }}
-          />
-
-        <TextField id="outlined-basic" label="Conference Name" variant="outlined" margin="normal"
-        value={val4 ?? ""} 
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editConferenceName(event.target.value));
-        }}
-        />
-
-        <Stack direction={"row"} spacing={2}>
-
-        <DatePicker label="Conference Start Date" sx={{flex: 1}} />
-
-        <DatePicker label="Conference End Date" sx={{flex: 1}} />
-
-        </Stack>
-
-        <hr style={{width: "100%"}}></hr>
-
-        <Typography variant="body1" gutterBottom>
-        Please complete the below with dollar amounts only.
-      </Typography>
-
-        <CurrencyTextFieldFormControl fullWidth label={"Hotel (Room/Tax Only)"}
-        value={val7 ?? ""}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editHotel(event.target.value));
-        }}
-        ></CurrencyTextFieldFormControl>
 
 
-        <Stack direction={"row"} spacing={2}>
-          
-        {/* <AttachMoney sx={{ color: 'action.active', mr: 1, my: 0.5 }} /> */}
+
+          <Stack mt={4} direction={smBreakpoint ? "row" : "column"} gap={3} alignItems={"start"} sx={{ marginLeft: "auto", marginRight: "auto", maxWidth: 800 }}>
 
 
-        <CurrencyTextFieldFormControl fullWidth label={"Airfare/Train"}
-        value={val8 ?? ""}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editAirfare(event.target.value));
-        }}
-        ></CurrencyTextFieldFormControl>
+            <Stack direction={"column"} gap={2} order={smBreakpoint ? 0 : 2} flexGrow={1}>
 
-      <CurrencyTextFieldFormControl fullWidth label={"Luggage Fees"}
-        value={val9 ?? ""}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editLuggage(event.target.value));
-        }}
-        ></CurrencyTextFieldFormControl>
-
-        </Stack>
-
-        <CurrencyTextFieldFormControl fullWidth label={"Mileage if driving to meetings ($200 MAX) @ $.67/mile"}
-        value={val10 ?? ""}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editMileage(event.target.value));
-        }}
-        ></CurrencyTextFieldFormControl>
-
-<CurrencyTextFieldFormControl fullWidth label={"Ground Transportation To/From Airport (Cab/Shuttle/Uber)"}
-        value={val11 ?? ""}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editGroundTransportation(event.target.value));
-        }}
-        ></CurrencyTextFieldFormControl>
-
-<CurrencyTextFieldFormControl fullWidth label={"Misc. Pre-approved Reimbursements"}
-        value={val12 ?? ""}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editMisc(event.target.value));
-        }}
-        ></CurrencyTextFieldFormControl>
+              <Stack direction={"row"} gap={2}>
+                <FormCard1 />
+                <InfoCard />
+              </Stack>
 
 
-       
-        <TextField id="standard-basic" label="Total" variant="standard" disabled
-        value={areAllUndefinedOrNull ? "" : total} />
 
-<hr style={{width: "100%"}}></hr>
+              {/* <AccountBoxTwoTone fontSize='medium' sx={{ color: '#bbb', bgcolor: "white" }} /> */}
+              <Card elevation={0} sx={{ borderRadius: 8, bgcolor: "#fff" }}>
+              <CardHeader
+                      avatar={
+                        <Avatar sx={{ bgcolor: "#333e5d" }} aria-label="recipe">
+                          2
+                        </Avatar>
+                      }
+                      // action={
+                      //   <IconButton aria-label="settings">
+                      //     <AccountCircleOutlined />
+                      //   </IconButton>
+                      // }
+                      title="Confirm and sign below"
+                      // titleTypographyProps={{ variant: "h6" }}
+                      subheader="* Indicates required field"
+                      sx={{ bgcolor: "#e7e7e7" }}
+                    />
+{/* <Divider></Divider> */}
+                <Stack direction={"column"} flexGrow={1} width={"100%"} bgcolor={"#fff"}>
+                  <CardContent sx={{flexGrow: 1,}}>
+                    <Box>
+                    <FormCard2></FormCard2>
+                    </Box>
+                  </CardContent>
 
-        <label style={{textAlign: "left"}}>Upload Receipt PDF</label>
-        <Button variant="contained">Add file</Button>
+                  <CardContent sx={{ flexShrink: 100, bgcolor: "#f5f5f5", borderRadius: 0 }}>
+                  <FormCard3></FormCard3>
+                  </CardContent>
+                </Stack>
 
-        </Stack>
+              </Card>
 
-        <hr></hr>
 
-        <FormControlLabel required control={<Checkbox checked={val13} onChange={(val) => {
-          dispatch(editConfirm());
-        }} />} 
-        label="By checking this box you are confirming that all reimbursement amounts and receipts are true and valid for this conference." />
+              <Stack direction={"row"} gap={2}>
+                <Card sx={{ minWidth: 275, width: "100%", flexGrow: 1, }} variant='outlined'>
+                  <CardHeader
+                    avatar={
+                      <Avatar sx={{ bgcolor: "#333e5d" }} aria-label="recipe">
+                        3
+                      </Avatar>
+                    }
+                    // action={
+                    //   <IconButton aria-label="settings">
+                    //     <AccountCircleOutlined />
+                    //   </IconButton>
+                    // }
+                    title="Confirm and sign below"
+                    // titleTypographyProps={{ variant: "h6" }}
+                    subheader="* Indicates required field"
+                  />
+                  <CardContent sx={{ position: "relative" }}>
+                    <FormCard4></FormCard4>
+                  </CardContent>
+                </Card>
 
-        <hr></hr>
+                <Button type="submit" size="large" variant='contained' color='secondary'>Submit</Button>
 
-        <TextField id="outlined-basic" name="signature" label="Type Your Full Name Here" variant="outlined" margin="normal" 
-        value={val14 ?? ""} fullWidth
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          dispatch(editSignature(event.target.value));
-        }}
-        />
+              </Stack>
 
-      </CardContent>
-      <CardActions>
-        <Button type="submit" size="medium">Submit</Button>
-      </CardActions>
-    </Card>
-    </LocalizationProvider>
-    </form>
+            </Stack>
+
+            {/* <InfoCard></InfoCard> */}
+
+          </Stack>
+
+
+
+
+
+
+        </LocalizationProvider>
+      </form>
     </div>
   );
 }
