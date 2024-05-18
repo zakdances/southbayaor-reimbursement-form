@@ -5,7 +5,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import CssBaseline from '@mui/material/CssBaseline';
 import { Provider } from 'react-redux';
-import store, { FileListsProvider } from './view model/store';
+import store, { MainContextProvider } from './view model/store';
 import { ThemeProvider } from '@mui/material';
 import mainTheme from './theme';
 
@@ -17,11 +17,11 @@ root.render(
   <React.StrictMode>
     <ThemeProvider theme={mainTheme}>
       <CssBaseline />
-      <FileListsProvider>
+      <MainContextProvider>
         <Provider store={store}>
           <App />
         </Provider>
-      </FileListsProvider>
+      </MainContextProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

@@ -6,6 +6,8 @@ import { configureStore, applyMiddleware } from '@reduxjs/toolkit'
 import formReducer from './reducers/form';
 import dialogReducer from './reducers/dialog';
 import fileListsReducer, { FileListsAction, FileListsState, fileListsInitialState } from './reducers/formFileInput';
+import { NetworkAction, NetworkState, networkInitialState } from './reducers/network';
+import mainContextReducer from './reducers/MainContextReducer';
 // import favoritesMiddleware from './middleware';
 
 // const middlewareEnhancer = applyMiddleware(favoritesMiddleware)
@@ -18,23 +20,33 @@ const store = configureStore({
   // middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(favoritesMiddleware),
 })
 
-export const FileListsContext = createContext<{
-  contextState: FileListsState;
-  contextDispatch: Dispatch<FileListsAction>;
+export type MainContextState = {
+  files: FileListsState,
+  network: NetworkState
+};
+
+const mainContextInitialState: MainContextState = {
+  files: fileListsInitialState,
+  network: networkInitialState
+}
+
+export const MainContext = createContext<{
+  contextState: MainContextState,
+  contextDispatch: Dispatch<FileListsAction | NetworkAction>
 }>({
-  contextState: fileListsInitialState,
+  contextState: mainContextInitialState,
   contextDispatch: () => null
 });
 
 // Create a provider component that will wrap your app and provide the store to all components
 // const [state, dispatch] = useReducer(fileListsReducer, fileListsInitialState);
-export const FileListsProvider: React.FC<{ children: React.ReactNode }> = ({ children }): React.ReactElement => {
-  const [contextState, contextDispatch] = useReducer(fileListsReducer, fileListsInitialState);
+export const MainContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }): React.ReactElement => {
+  const [contextState, contextDispatch] = useReducer(mainContextReducer, mainContextInitialState);
 
   return (
-    <FileListsContext.Provider value={{contextState, contextDispatch}}>
+    <MainContext.Provider value={{contextState, contextDispatch}}>
       {children}
-    </FileListsContext.Provider>
+    </MainContext.Provider>
   );
 }
 

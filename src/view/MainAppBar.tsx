@@ -21,7 +21,7 @@ export default function MainAppBar() {
           >
             <MenuIcon />
           </IconButton> */}
-          <Box maxWidth={900} flexGrow={1}>
+          <Box maxWidth={780} flexGrow={1}>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Check Request
           </Typography>

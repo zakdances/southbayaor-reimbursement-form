@@ -13,7 +13,7 @@ export type FileListsAction =
   | { type: 'form/addFileInput' }
   | { type: 'form/removeFileInput', payload: {index: number} };
 
-// Define your reducer function to handle state updates
+// Reducer function to handle state updates
 const fileListsReducer = (state: FileListsState, action: FileListsAction): FileListsState => {
     // Handle different action.
     switch (action.type) {

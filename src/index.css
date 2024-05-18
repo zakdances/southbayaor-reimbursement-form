@@ -7,7 +7,9 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #303e62 !important;
+  /* background-color: #e4eff4 !important; */
+  background-color: #e8eaed !important;
+  /* background-color: #fafafa !important; */
 }
 
 code {

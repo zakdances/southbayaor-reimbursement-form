@@ -14,7 +14,8 @@ import FormSection1 from './FormSection1';
 import FormSection2 from './FormSection2';
 import FormSection3 from './FormSection3';
 
-import { FileListsContext } from '../view model/store';
+import { MainContext } from '../view model/store';
+import NumberAvatar from './NumberAvatar';
 // import htmlFileLists from '../util/htmlFileLists';
 
 const VisuallyHiddenInput = styled('input')({
@@ -52,7 +53,7 @@ function FormCard3() {
   // const fileList = useAppSelector(state => state.form.fileList);
   // const fileLists = useAppSelector(state => state.form.fileLists);
   
-  const { contextState, contextDispatch } = useContext(FileListsContext);
+  const { contextState, contextDispatch } = useContext(MainContext);
 
   const values = [val7, val8, val9, val10, val11, val12];
   const numValues = values.map((v) => v ? numbro.unformat(v) : undefined);
@@ -62,21 +63,22 @@ function FormCard3() {
   }, 0);
 
   return (
-    <Box sx={{ textAlign: "left", border: "0px solid #eee", }} pb={2}>
+    <Box sx={{ textAlign: "left", border: "0px solid #eee", }} pb={2} pt={0} maxWidth={500}>
+      
       {/* <Typography variant="body1" color="text.secondary">
           Enter personal and conference information below
         </Typography> */}
       {/* <Divider></Divider> */}
 
 
-      <Typography variant="subtitle2" color="text.primary" mt={3} mb={3} ml={7} className='poppins-regular'>
+      {/* <Typography variant="subtitle2" color="text.primary" mt={3} mb={3} ml={7} className='poppins-regular'>
                 Please complete the below with dollar amounts only.
-                </Typography>
+                </Typography> */}
 
 
 
 
-      <Stack gap={2} direction={"row"} sx={{ width: "100%" }}>
+      <Stack gap={3} direction={"row"} sx={{ width: "100%" }} mb={2}>
       {/* <ReceiptLongOutlined sx={{ color: 'action.active' }} fontSize='medium' /> */}
         {/* <HotelOutlined sx={{ color: 'action.active' }} fontSize='medium' /> */}
 
@@ -88,12 +90,13 @@ function FormCard3() {
       </Stack> */}
 
 <HotelTwoTone fontSize='medium' sx={{ color: '#bbb' }} />
-          <FormSection3></FormSection3>
+          
 
 
       </Stack>
 
                 <Divider></Divider>
+
       <Stack gap={2} direction={"row"}>
       <FileUploadOutlined sx={{ color: 'action.active' }} fontSize='medium' />
 
@@ -107,7 +110,7 @@ function FormCard3() {
 
           <Stack direction={"column"} gap={2} sx={{ width: "100%" }}>
 
-            {contextState.fileLists.map((v, i) => (
+            {contextState.files.fileLists.map((v, i) => (
               <Stack direction={"row"} gap={2} key={i}>
                 <Button
                   component="label"

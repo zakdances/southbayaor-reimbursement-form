@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import logo from './logo.png';
 import './App.css';
 import FormView from './FormView';
@@ -26,6 +26,33 @@ function App() {
     dispatch(editDialogOpen(false));
   };
 
+  // const prevDialogOpenValueRef = useRef(dialogOpen);
+  useEffect(() => {
+    // Get the previous value from the ref
+    // const prevValue = prevValueRef.current;
+
+    // Update the ref with the current value for the next render
+    
+
+    // Your logic here
+    const origin = "reimbursementFormIframe";
+    // if (prevDialogOpenValueRef.current !== dialogOpen && dialogOpen === true) {
+    //   window.parent.postMessage({bodyText: dialogMessage, origin: origin}, "*");
+    // }
+    if (dialogOpen === true) {
+      window.parent.postMessage({
+        bodyText: dialogMessage.text, 
+        showSpinner: dialogMessage.showSpinner, 
+        showCloseButton: dialogMessage.showCloseButton,
+        origin: origin}, "*");
+    }
+    
+
+    // prevDialogOpenValueRef.current = dialogOpen;
+  }, [dialogOpen, dialogMessage]);
+
+  
+
   return (
     <div className="App">
       {/* <header className="App-header" >
@@ -38,7 +65,7 @@ function App() {
       </div>
 
       <Dialog
-        open={dialogOpen}
+        open={dialogOpen ? false : false}
         TransitionComponent={Transition}
         keepMounted
         onClose={handleDialogClose}

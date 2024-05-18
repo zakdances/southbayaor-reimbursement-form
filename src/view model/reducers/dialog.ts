@@ -3,7 +3,8 @@ import { createAction, createReducer, AnyAction, PayloadAction } from '@reduxjs/
 
 interface DialogMessage {
   text: string,
-  showSpinner?: boolean
+  showSpinner?: boolean,
+  showCloseButton?: boolean
 }
 
 interface dialogState {

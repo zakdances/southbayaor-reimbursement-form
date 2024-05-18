@@ -20,7 +20,7 @@ function FormSection2() {
   const val6 = useAppSelector(state => state.form.dateEnded);
 
     return (
-        <Stack direction="column" gap={3} >
+        <Stack direction="column" gap={3} mt={0} p={0} pl={0}>
 
             <TextField id="outlined-basic" label="Conference Name" variant="outlined" size='medium'
                       value={val4 ?? ""} required fullWidth={false}
@@ -31,16 +31,16 @@ function FormSection2() {
                       // FormHelperTextProps={{sx: {opacity: 0, pointerEvents: "none"}}}
                     />
 
-                    <Stack direction={smBreakpoint ? "row" : "column"} spacing={2} flexGrow={1} sx={{width: "100%"}}>
+                    <Stack direction={smBreakpoint ? "row" : "column"} spacing={2} flexGrow={1} mb={0} sx={{width: "100%"}}>
 
-                      <DatePicker label="Conference Start" sx={{ flex: 1 }}
+                      <DatePicker label="Start Date *" sx={{ flex: 1 }}
                       value={typeof val5 === 'number' ? dayjs(val5) : null} 
                       onChange={(val) => {
                         if (val) dispatch(editDateStarted(val.valueOf()));
                       }}
                       />
 
-                      <DatePicker label="Conference End" sx={{ flex: 1 }} 
+                      <DatePicker label="End Date *" sx={{ flex: 1 }} 
                       value={typeof val6 === 'number' ? dayjs(val6) : null} 
                       onChange={(val) => {
                         if (val) dispatch(editDateEnded(val.valueOf()));

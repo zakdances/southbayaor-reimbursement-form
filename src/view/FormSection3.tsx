@@ -6,9 +6,10 @@ import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import CurrencyTextFieldFormControl from './CurrencyTextFieldFormControl';
 import numbro from 'numbro';
+import { AttachMoney } from '@mui/icons-material';
 
 function FormSection3() {
-    const dispatch = useAppDispatch();
+  const dispatch = useAppDispatch();
 
   const val1 = useAppSelector(state => state.form.payTo);
   const val2 = useAppSelector(state => state.form.dateSubmitted);
@@ -29,69 +30,71 @@ function FormSection3() {
 
   const values = [val7, val8, val9, val10, val11, val12];
   const numValues = values.map((v) => v ? numbro.unformat(v) : undefined);
-  const areAllUndefinedOrNull = numValues.every(v => typeof v === "number");
-  const total = numValues.reduce((p: number, v) => {
-    return typeof v === 'number' ? p + v : p;
+  // const numValueTypes = numValues.map((v) => typeof v);
+  const areAllUndefinedOrNull = numValues.every(v => v === undefined || v === null);
+  
+  const total = numValues.reduce((acc: number, v) => {
+    return typeof v === 'number' ? acc + v : acc;
   }, 0);
 
-    return (
-        <Stack direction="column" gap={4} flexGrow={1}>
-            <CurrencyTextFieldFormControl fullWidth label={"Hotel Room"}
-                    value={val7 ?? ""}  helperText={"room/tax only"}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      dispatch(editHotel(event.target.value));
-                    }}
-                  ></CurrencyTextFieldFormControl>
+  return (
+    <Stack direction="column" gap={4} flexGrow={1} >
+      <CurrencyTextFieldFormControl fullWidth label={"Hotel Room"}
+        value={val7 ?? ""} helperText={"room/tax only"}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          dispatch(editHotel(event.target.value));
+        }}
+      ></CurrencyTextFieldFormControl>
 
 
-                  <Stack direction={"row"} spacing={2}>
+      <Stack direction={"row"} spacing={2}>
 
-                    {/* <AttachMoney sx={{ color: 'action.active', mr: 1, my: 0.5 }} /> */}
+        {/* <AttachMoney sx={{ color: 'action.active', mr: 1, my: 0.5 }} /> */}
 
 
-                    <CurrencyTextFieldFormControl fullWidth label={"Airfare/Train"}
-                      value={val8 ?? ""}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        dispatch(editAirfare(event.target.value));
-                      }}
-                    ></CurrencyTextFieldFormControl>
+        <CurrencyTextFieldFormControl fullWidth label={"Airfare/Train"}
+          value={val8 ?? ""}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            dispatch(editAirfare(event.target.value));
+          }}
+        ></CurrencyTextFieldFormControl>
 
-                    <CurrencyTextFieldFormControl fullWidth label={"Luggage Fees"}
-                      value={val9 ?? ""}
-                      onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                        dispatch(editLuggage(event.target.value));
-                      }}
-                    ></CurrencyTextFieldFormControl>
+        <CurrencyTextFieldFormControl fullWidth label={"Luggage Fees"}
+          value={val9 ?? ""}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            dispatch(editLuggage(event.target.value));
+          }}
+        ></CurrencyTextFieldFormControl>
 
-                  </Stack>
+      </Stack>
 
-                  <CurrencyTextFieldFormControl fullWidth label={"Mileage if driving to meetings"}
-                    value={val10 ?? ""} helperText={"$200 MAX @ $.67/mile"}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      dispatch(editMileage(event.target.value));
-                    }}
-                  ></CurrencyTextFieldFormControl>
+      <CurrencyTextFieldFormControl fullWidth label={"Mileage if driving to meetings"}
+        value={val10 ?? ""} helperText={"$200 MAX @ $.67/mile"}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          dispatch(editMileage(event.target.value));
+        }}
+      ></CurrencyTextFieldFormControl>
 
-                  <CurrencyTextFieldFormControl fullWidth label={"Ground Transportation To/From Airport"}
-                    value={val11 ?? ""} helperText={"$(Cab/Shuttle/Uber)"}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      dispatch(editGroundTransportation(event.target.value));
-                    }}
-                  ></CurrencyTextFieldFormControl>
+      <CurrencyTextFieldFormControl fullWidth label={"Ground Transportation To/From Airport"}
+        value={val11 ?? ""} helperText={"$(Cab/Shuttle/Uber)"}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          dispatch(editGroundTransportation(event.target.value));
+        }}
+      ></CurrencyTextFieldFormControl>
 
-                  <CurrencyTextFieldFormControl fullWidth label={"Misc. Pre-approved Reimbursements"}
-                    value={val12 ?? ""}
-                    onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                      dispatch(editMisc(event.target.value));
-                    }}
-                  ></CurrencyTextFieldFormControl>
+      <CurrencyTextFieldFormControl fullWidth label={"Misc. Pre-approved Reimbursements"}
+        value={val12 ?? ""}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+          dispatch(editMisc(event.target.value));
+        }}
+      ></CurrencyTextFieldFormControl>
 
-                  <CurrencyTextFieldFormControl fullWidth label={"Total"} variant="filled"
-                    value={areAllUndefinedOrNull ? "" : numbro(total).format({thousandSeparated: true})}
-                  ></CurrencyTextFieldFormControl>
+      <CurrencyTextFieldFormControl fullWidth label={"Total"} variant="filled"
+        value={areAllUndefinedOrNull ? "" : numbro(total).format({ thousandSeparated: true })}
+      ></CurrencyTextFieldFormControl>
 
-        </Stack>
-    )
+    </Stack>
+  )
 }
 
 export default FormSection3;

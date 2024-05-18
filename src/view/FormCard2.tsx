@@ -61,7 +61,7 @@ function FormCard2() {
 {/* <Divider></Divider> */}
                 <Stack gap={3} direction={"row"}>
 
-                <MeetingRoomTwoTone fontSize='medium' sx={{ color: '#bbb' }} />
+                {/* <MeetingRoomTwoTone fontSize='medium' sx={{ color: '#bbb' }} /> */}
 
                   <Stack gap={0} sx={{ flexGrow: 1 }}>
 
