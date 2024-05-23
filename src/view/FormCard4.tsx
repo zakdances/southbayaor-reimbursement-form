@@ -42,7 +42,7 @@ function FormCard4() {
 
 
 
-              <Stack direction={"column"} gap={4} p={2}>
+              <Stack direction={"column"} gap={4} p={0}>
 
                 <FormControlLabel required control={<Checkbox checked={val13} onChange={(val) => {
                   dispatch(editConfirm());

@@ -22,7 +22,7 @@ function InfoCard() {
     // borderStyle: "dotted",
     borderColor: "primary.light",
     // paddingBottom: 24
-    }} variant='outlined'>
+    }} variant='elevation'>
 
 <CardHeader
                   avatar={
@@ -47,11 +47,11 @@ function InfoCard() {
       <CardContent sx={{
         // height: "100%", 
         p: 4,
-        pt: 8,
+        // pt: 8,
         alignItems: "start", justifyContent: "center", display: "flex", flexDirection: "column"
 
       }}>
-        <Box maxWidth={600} margin={"0 auto"}>
+        <Box>
         <Typography variant="body1" color="white" className='poppins-regular'>
           This form must be completed and sent in, along with your written report, no later than 14 days after
           the conclusion of the meetings.
@@ -62,7 +62,7 @@ function InfoCard() {
         {/* <Divider></Divider> */}
 
         <Box pt={2}>
-          <Typography variant="body1" color="primary.main">
+          <Typography variant="body1" color="#ddd">
             * Indicates required field
           </Typography>
         </Box>

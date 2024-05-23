@@ -32,7 +32,8 @@ import {
   MeetingRoom, MeetingRoomOutlined, AccountCircleOutlined, Receipt, ReceiptLong, ReceiptLongOutlined, ReceiptOutlined,
   AttachMoneyOutlined,
   AccountBoxTwoTone,
-  ExpandMore
+  ExpandMore,
+  ArrowDownwardOutlined
 } from '@mui/icons-material';
 
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -268,81 +269,124 @@ function FormView() {
               ))}
             </Masonry>
             </Box> */}
-<Paper variant='outlined' sx={{mb: 0}}>
-<InfoCard />
+            <Paper variant='elevation' sx={{ mb: 0 }}>
+              <InfoCard />
               <Box p={4}>
-            <Typography variant='h4' color={"primary"}>Travel Expenses Reimbursement Form</Typography>
-            </Box>
-</Paper>
-            <Paper component={"div"} variant='elevation' elevation={0} sx={{bgcolor: "transparent"}}>
-            
-            
+                <Typography variant='h4' color={"primary"}>Travel Expenses Reimbursement Form</Typography>
+              </Box>
+            </Paper>
+            <Paper component={"div"} variant='elevation' elevation={0} sx={{ bgcolor: "transparent" }}>
 
-              <Accordion defaultExpanded variant={cardVariant} elevation={1} sx={{overflow: "hidden"}}>
-                {/* <FormCardHeader title={"1. Personal Info"} avatarIcon={"1"} /> */}
-                
-                <AccordionDetails sx={{p: 2}}>
-                <Typography variant='h4' mb={2} ml={2}>1. Personal Info</Typography>
 
+
+              <Accordion defaultExpanded variant={cardVariant} elevation={1} sx={{ overflow: "hidden" }}>
+                {/* <FormCardHeader title={"Personal Info"} avatarIcon={"1"} /> */}
+                <AccordionSummary
+                  expandIcon={<ExpandMore fontSize='large' />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                // sx={{bgcolor: "#fafafa"}}
+                >
+                  {/* 1. Personal Info */}
+                  <Typography variant='h4' mb={0} ml={2}>1. Personal Info</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  {/* <Typography variant='h4' mb={2} ml={2}>1. Personal Info</Typography> */}
+
+                  {/* <Divider></Divider> */}
                   <FormSection1 />
+                  {/* <Divider></Divider> */}
+                  {/* <FormSection2 /> */}
+                  {/* <Divider></Divider> */}
+                  
                 </AccordionDetails>
+                {/* <AccordionActions>
+          <ArrowDownwardOutlined fontSize='large' color="primary" />
+        </AccordionActions> */}
               </Accordion>
-              <Accordion defaultExpanded variant={cardVariant} elevation={1} sx={{overflow: "hidden"}}>
-                {/* <FormCardHeader title={"2. Conference Info"} avatarIcon={"2"} /> */}
-                <AccordionDetails sx={{padding: 2}}>
-                <Typography variant='h4' mb={2} ml={2}>2. Conference Info</Typography>
-                  <Stack direction={"column"} gap={2}>
-                  <FormSection2 />
-                  
-                  
-                  <Paper sx={{bgcolor: "#fff6d1", p: 2}}>
-                    {/* <Typography variant='h6'>Use US Dollars Only</Typography> */}
-                    <CardHeader
-                    avatar={
-                      <NumberAvatar>
-                        <ReceiptLongOutlined />
-                      </NumberAvatar>
-                    }
-                    // action={
-                    //   <IconButton aria-label="settings">
-                    //     <AccountCircleOutlined />
-                    //   </IconButton>
-                    // }
-                    title="Enter receipt info"
-                    titleTypographyProps={{ variant: "h6" }}
-                    subheader="Use US dollar amounts only.
-                  "
-                    sx={{
-                      // bgcolor: "#fafafa", 
 
-                      borderRadius: 100,
-                      mb: 2
-                    }}
-                  />
-                    <FormSection3></FormSection3>
-                  </Paper>
-                  
+              <Accordion defaultExpanded variant={cardVariant} elevation={1} sx={{ overflow: "hidden" }}>
+                <AccordionSummary
+                  expandIcon={<ExpandMore fontSize='large' />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                >
+                  <Typography variant='h4' ml={2}>2. Conference Info</Typography>
+                </AccordionSummary>
+                {/* <FormCardHeader title={"Conference Info"} avatarIcon={"2"} /> */}
+                <AccordionDetails sx={{ padding: 2 }}>
+                  {/* <Typography variant='h4' mb={2} ml={2}>2. Conference Info</Typography> */}
+                  <Stack direction={"column"} gap={2}>
+                    <FormSection2 />
+
+                    {/* <FormSection2 /> */}
+                    <Paper sx={{ bgcolor: "#fff6d1", p: 2 }}>
+                      {/* <Typography variant='h6'>Use US Dollars Only</Typography> */}
+                      <CardHeader
+                        avatar={
+                          <NumberAvatar>
+                            <ReceiptLongOutlined />
+                          </NumberAvatar>
+                        }
+                        // action={
+                        //   <IconButton aria-label="settings">
+                        //     <AccountCircleOutlined />
+                        //   </IconButton>
+                        // }
+                        title="Enter receipt info"
+                        titleTypographyProps={{ variant: "h6" }}
+                        subheader="Use US dollar amounts only.
+                  "
+                        sx={{
+                          // bgcolor: "#fafafa", 
+
+                          borderRadius: 100,
+                          mb: 2
+                        }}
+                      />
+                      <FormSection3></FormSection3>
+                    </Paper>
+
                   </Stack>
                 </AccordionDetails>
+                {/* <AccordionActions>
+          <ArrowDownwardOutlined fontSize='large' color="primary" />
+        </AccordionActions> */}
               </Accordion>
-      
+
               <Accordion defaultExpanded variant={cardVariant} elevation={1}>
-                {/* <FormCardHeader title={"Upload Receipts"} avatarIcon={"4"} /> */}
-                <AccordionDetails sx={{padding: 2}}>
-                <Typography variant='h4' mb={2} ml={2}>3. Upload Receipts</Typography>
-                <FormCard3 />
+                <AccordionSummary
+                  expandIcon={<ExpandMore fontSize='large' />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                >
+                  {/* 1. Personal Info */}
+                  <Typography variant='h4' mb={0} ml={2}>3. Upload Receipts</Typography>
+                </AccordionSummary>
+                {/* <FormCardHeader title={"Upload Receipts"} avatarIcon={"3"} /> */}
+                <AccordionDetails sx={{ padding: 2 }}>
+                  {/* <Typography variant='h4' mb={2} ml={2}>3. Upload Receipts</Typography> */}
+                  <FormCard3 />
                 </AccordionDetails>
               </Accordion>
               <Accordion defaultExpanded variant={cardVariant} elevation={1}>
-                {/* <FormCardHeader title={"Upload Receipts"} avatarIcon={"5"} /> */}
-                <AccordionDetails sx={{padding: 2}}>
-                <Typography variant='h4' mb={2} ml={2}>4. Confirm and sign</Typography>
+                <AccordionSummary
+                  expandIcon={<ExpandMore fontSize='large' />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                >
+                  {/* 1. Personal Info */}
+                  <Typography variant='h4' mb={0} ml={2}>4. Confirm and sign</Typography>
+                </AccordionSummary>
+                {/* <FormCardHeader title={"Confirm and sign"} avatarIcon={"5"} /> */}
+                <AccordionDetails>
+                  {/* <Typography variant='h4' mb={2} ml={2}>4. Confirm and sign</Typography> */}
                   <FormCard4></FormCard4>
                 </AccordionDetails>
-                <AccordionActions>
+                {/* <AccordionActions>
                   <Button>Cancel</Button>
                   <Button>Agree</Button>
-                </AccordionActions>
+                </AccordionActions> */}
               </Accordion>
             </Paper>
 

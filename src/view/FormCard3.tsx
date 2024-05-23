@@ -76,32 +76,13 @@ function FormCard3() {
                 </Typography> */}
 
 
-
-
-      <Stack gap={3} direction={"row"} sx={{ width: "100%" }} mb={2}>
-      {/* <ReceiptLongOutlined sx={{ color: 'action.active' }} fontSize='medium' /> */}
-        {/* <HotelOutlined sx={{ color: 'action.active' }} fontSize='medium' /> */}
-
-
-      {/* <Stack direction={"row"} justifyContent={"center"} sx={{width: 40}}>
-                <Avatar sx={{ width: 40, height: 40, bgcolor: "#fff", border: "1px solid #fff" }}>
-      <HotelOutlined fontSize='large' sx={{ color: '#999' }} />
-      </Avatar>
-      </Stack> */}
-
-<HotelTwoTone fontSize='medium' sx={{ color: '#bbb' }} />
-          
-
-
-      </Stack>
-
-                <Divider></Divider>
+                {/* <Divider></Divider> */}
 
       <Stack gap={2} direction={"row"}>
       <FileUploadOutlined sx={{ color: 'action.active' }} fontSize='medium' />
 
         <Stack direction={"column"}>
-          <Typography variant="subtitle2" color="text.primary" mt={2} mb={2} className='poppins-regular'>
+          <Typography variant="subtitle2" color="text.primary" mt={0} mb={2} className='poppins-regular'>
             Upload up to 10 receipts. Each file must be a JPEG, PNG, or PDF and 20mb or less in size.
           </Typography>
 

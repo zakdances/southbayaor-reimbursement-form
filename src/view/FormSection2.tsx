@@ -1,4 +1,4 @@
-import { TextField, Stack } from '@mui/material';
+import { TextField, Stack, Divider } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import './../App.css';
@@ -21,6 +21,7 @@ function FormSection2() {
 
     return (
         <Stack direction="column" gap={3} mt={0} p={0} pl={0}>
+          {/* <Divider></Divider> */}
 
             <TextField id="outlined-basic" label="Conference Name" variant="outlined" size='medium'
                       value={val4 ?? ""} required fullWidth={false}

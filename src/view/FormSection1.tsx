@@ -1,10 +1,12 @@
-import { TextField, Stack, Box, Divider } from '@mui/material';
+import { TextField, Stack, Box, Divider, Typography } from '@mui/material';
 import './../App.css';
 import { useAppDispatch, useAppSelector } from './../view model/hooks';
 import { editCity, editDateSubmitted, editMailingAddress, editPayTo, editStateName, editZip } from '../view model/reducers/form';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AccountBoxOutlined, AccountBoxTwoTone, LocalPostOfficeTwoTone, MailOutlined, MarkunreadMailboxOutlined, PersonOutlineOutlined } from '@mui/icons-material';
+
+const gap = 2;
 
 function FormSection1() {
   const dispatch = useAppDispatch();
@@ -21,15 +23,15 @@ function FormSection1() {
   // const val6 = useAppSelector(state => state.form.zip);
 
   return (
-    <Stack direction="column" gap={2} flexGrow={1} mt={0} mr={1} p={0} pt={0} pb={0}>
-
-<Stack direction={"row"} gap={3}>
+    <Stack direction="column" gap={gap} flexGrow={1} mt={0} mr={0} p={0} pt={0} pb={0}>
+      {/* <Divider></Divider> */}
+      <Stack direction={"row"} gap={gap + 1} flexWrap={"wrap"}>
 
         {/* <PersonOutlineOutlined fontSize='medium' sx={{ color: 'action.active' }} /> */}
 
-        <TextField id="outlined-basic" name="payTo" label="Pay To" 
-          variant="outlined" size='medium' required fullWidth
-          value={val1 ?? ""} sx={{maxWidth: 410}}
+        <TextField id="outlined-basic" name="payTo" label="Pay To"
+          variant="outlined" size='medium' required
+          value={val1 ?? ""} sx={{ flexGrow: 1, flexBasis: 0, minWidth: 300, }}
           onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
             dispatch(editPayTo(event.target.value));
           }}
@@ -37,42 +39,42 @@ function FormSection1() {
         // FormHelperTextProps={{ sx: { opacity: 1, pointerEvents: "none" } }}
         />
 
-        
+          {/* <Box flexGrow={1} minWidth={300}></Box> */}
 
-</Stack>
-     
+      </Stack>
+
 
       {/* <Divider></Divider> */}
 
 
-      <Stack direction={"row"} gap={3}>
+      <Stack direction={"row"} gap={gap + 1}>
         {/* <MarkunreadMailboxOutlined fontSize='medium' sx={{ color: 'action.active' }} /> */}
-        <Stack direction={"column"} gap={2} flexGrow={1}>
+        <Stack direction={"column"} gap={gap} flexGrow={1}>
 
-        <Stack direction={"row"} gap={2} flexWrap={"wrap"}>
+          <Stack direction={"row"} gap={gap} flexWrap={"wrap"}>
 
-        <TextField id="outlined-basic" label="Mailing Address" variant="outlined" multiline
-          maxRows={1} size='medium' sx={{flexGrow: 1, minWidth: 400}}
-          value={val3 ?? ""} required
-          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-            dispatch(editMailingAddress(event.target.value));
-          }}
-        // helperText="Required"
-        // FormHelperTextProps={{ sx: { opacity: 0, pointerEvents: "none" } }}
-        />
+            <TextField id="outlined-basic" label="Mailing Address" variant="outlined" multiline
+              maxRows={1} size='medium' sx={{ flexGrow: 1, minWidth: 300 }}
+              value={val3 ?? ""} required
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                dispatch(editMailingAddress(event.target.value));
+              }}
+            // helperText="Required"
+            // FormHelperTextProps={{ sx: { opacity: 0, pointerEvents: "none" } }}
+            />
 
-          <TextField id="outlined-basic" label="City" variant="outlined" multiline
-            maxRows={1} size='medium' sx={{flexGrow: 1, minWidth: 400}}
-            value={val32 ?? ""} required
-            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-              dispatch(editCity(event.target.value));
-            }}
-          // helperText="Required"
-          // FormHelperTextProps={{ sx: { opacity: 0, pointerEvents: "none" } }}
-          />
+            <TextField id="outlined-basic" label="City" variant="outlined" multiline
+              maxRows={1} size='medium' sx={{ flexGrow: 1, minWidth: 300 }}
+              value={val32 ?? ""} required
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                dispatch(editCity(event.target.value));
+              }}
+            // helperText="Required"
+            // FormHelperTextProps={{ sx: { opacity: 0, pointerEvents: "none" } }}
+            />
           </Stack>
 
-          <Stack direction={"row"} gap={2}>
+          <Stack direction={"row"} gap={gap}>
             <   TextField id="outlined-basic" label="State" variant="outlined" multiline
               maxRows={1} size='medium' fullWidth
               value={val33 ?? ""} required

@@ -15,18 +15,18 @@ const FormCardHeader = (props: any) => {
             borderRadius: 0
         }}>
         <CardHeader
-            // avatar={
-            //     <Stack direction="row" order={2} alignItems={"center"} gap={2}>
-            //   <NumberAvatar>
-            //     {avatarIcon}
-            //   </NumberAvatar>
+            avatar={
+                <Stack direction="row" order={2} alignItems={"center"} gap={2}>
+              <NumberAvatar>
+                {avatarIcon}
+              </NumberAvatar>
 
               
-            //   <NumberAvatar>
-            //     <MailOutlined color="info" />
-            //   </NumberAvatar>
-            //   </Stack>
-            // }
+              {/* <NumberAvatar>
+                <MailOutlined color="info" />
+              </NumberAvatar> */}
+              </Stack>
+            }
             action={
               <IconButton aria-label="settings" disabled>
                 <AttachMoneyOutlined />
@@ -35,16 +35,16 @@ const FormCardHeader = (props: any) => {
             // title={""}
             title={title}
             titleTypographyProps={{ 
-                variant: "h4",
+                variant: "h5",
                 color: "text.primary",
                 // color: "text.secondary"
             }}
             // subheader="* Indicates required field"
             sx={{ 
-                // bgcolor: "#fafafa",
+                bgcolor: "#fafafa",
                 // borderBottomLeftRadius: 0,
                 // borderBottomRightRadius: 35,
-                // borderBottom: "1px solid #ddd"
+                borderBottom: "1px solid #ddd"
                 // alignItems: "start",
                 // flexDirection: "column",
                 // gap: 2,
