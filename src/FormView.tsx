@@ -234,41 +234,10 @@ function FormView() {
             maxWidth: maxWidth
           }}>
 
-            {/* <Box 
-    
-          
-          p={2} sx={{ borderTopLeftRadius: 8, borderTopRightRadius: 8 }}>
-          <Typography variant="h5" color="primary" mb={2} >
-        Request Travel Reimbursement
-        </Typography>
-        </Box> */}
 
 
 
-            {/* <FormCard1 /> */}
-
-            {/* <Box width={1000} height={200}>
-            <Masonry columns={2} spacing={2}>
-              {huh.map((item, index) => (
-                <Card key={index} 
-                sx={{ minWidth: 275, height: 300, width: "100%", flexGrow: 1, borderRadius: 8, bgcolor: "#fafafa" }} 
-                variant='outlined'
-
-                >
-                  <FormCardHeader title={item.title} avatarIcon={"1"} />
-  
-                  <CardContent sx={{ position: "relative" }}>
-                    
-                    <Typography variant='h4' sx={{ mb: 3 }}>{index + 1}. {item.title}</Typography>
-  
-                    {item.component}
-  
-                  </CardContent>
-  
-                </Card>
-              ))}
-            </Masonry>
-            </Box> */}
+        
             <Paper variant='elevation' sx={{ mb: 0 }}>
               <InfoCard />
               <Box p={4}>
