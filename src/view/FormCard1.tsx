@@ -78,15 +78,7 @@ function FormCard1() {
           </Typography>
         </CardContent>
 
-        {/* <Divider></Divider> */}
-
-
-
-        {/* <CardContent>
-<Typography variant="body2" color="text.secondary" className='poppins-regular'>
-  * Inidications required field
-</Typography>
-</CardContent> */}
+   
 
         <Divider></Divider>
         {/* <FormCardHeader title="Personal Information" /> */}
