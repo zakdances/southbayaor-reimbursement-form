@@ -78,8 +78,6 @@ function FormCard1() {
           </Typography>
         </CardContent>
 
-   
-
         <Divider></Divider>
         {/* <FormCardHeader title="Personal Information" /> */}
 

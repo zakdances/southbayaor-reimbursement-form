@@ -32,6 +32,7 @@ function FormSection3() {
   const numValues = values.map((v) => v ? numbro.unformat(v) : undefined);
   // const numValueTypes = numValues.map((v) => typeof v);
   const areAllUndefinedOrNull = numValues.every(v => v === undefined || v === null);
+
   
   const total = numValues.reduce((acc: number, v) => {
     return typeof v === 'number' ? acc + v : acc;
@@ -90,7 +91,7 @@ function FormSection3() {
       ></CurrencyTextFieldFormControl>
 
       <CurrencyTextFieldFormControl fullWidth label={"Total"} variant="filled"
-        value={areAllUndefinedOrNull ? "" : numbro(total).format({ thousandSeparated: true })}
+        value={areAllUndefinedOrNull ? "" : numbro(total).format({ thousandSeparated: true, mantissa: 2 })}
       ></CurrencyTextFieldFormControl>
 
     </Stack>

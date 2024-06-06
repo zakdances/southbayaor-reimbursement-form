@@ -64,16 +64,35 @@ import { getCombinedNodeFlags } from 'typescript';
 import { Masonry } from '@mui/lab';
 // import htmlFileLists from './util/htmlFileLists';
 
-console.log("window.parent location hostname:");
-console.log(window.parent?.location.hostname);
-console.log("window location hostname:");
-console.log(window.location.hostname);
+// const hostnameProdKeyword = "southbayaor";
+// const isIframe = window.self !== window.top;
+// const url = isIframe ? document.referrer : document.location.href;
+// const isProd = url.includes(hostnameProdKeyword) &&
+// (
+// !url.includes("localhost") &&
+// !url.includes("127.0.0.1")
+// );
+
+// console.log("window.parent location hostname:");
+// console.log(url);
+// console.log("window location hostname:");
+// console.log(isProd);
 
 
 const getServerUrl = () => {
   const dev_server_url = "http://localhost:8080/";
   const prod_server_url = "https://us-west1-southbayaor-422114.cloudfunctions.net/function-hello-world";
   const hostnameProdKeyword = "southbayaor";
+
+  const isIframe = window.self !== window.top;
+  const url = isIframe ? document.referrer : document.location.href;
+  const isProd = url.includes(hostnameProdKeyword) &&
+(
+!url.includes("localhost") &&
+!url.includes("127.0.0.1")
+);
+
+  return isProd ? prod_server_url : dev_server_url;
 
   if (
     window.location.hostname.includes(hostnameProdKeyword) ||
@@ -128,6 +147,7 @@ function FormView() {
     e.preventDefault();
     const formData = new FormData();
     const files = e.currentTarget.files;
+    const errors: Error[] = [];
     // console.log("files");
 
     // console.log(files);
@@ -138,7 +158,8 @@ function FormView() {
       if (["hotel", "airfare", "luggage", "mileage", "groundTransportation", "misc"].includes(k)) {
         let numToAdd = v ? numbro.unformat(v) : undefined;
         if (numToAdd !== undefined) {
-          total = total === undefined ? numToAdd : total + numToAdd;
+          if (total === undefined) total = 0;
+          total += numToAdd;
         }
       }
 
@@ -146,21 +167,34 @@ function FormView() {
 
       return p;
     }, {});
-    if (total !== undefined) newFormState['total'] = total;
+    if (total !== undefined) newFormState['total'] = numbro(total).format({ thousandSeparated: true, mantissa: 2});
 
+    // Set text field values
     Object.entries(newFormState).forEach(([key, value]) => {
       formData.set(key, value as any);
     });
-    // formData.set('files', htmlFileLists as any);
+
+    // Set image files for upload
     contextState.files.fileLists.forEach(v => {
       if (v) {
         const file = v.item(0);
         if (file) {
           formData.append('files', file, file.name);
+          console.log(file.size);
+          // Check file size // 20 MB in bytes
+          if (file.size > 20 * 1024 * 1024) { 
+            errors.push(new Error("Form was not submitted. One or more of your selected images is over the limit of 20mb."));
+          }
         }
-
+        
       }
     })
+
+    if (errors.length > 0) {
+      dispatch(editDialogMessage({ text: errors[0].message, showCloseButton: true }));
+      dispatch(editDialogOpen(true));
+      return;
+    }
 
     // formData'fileLists'] = htmlFileLists;
     dispatch(editDialogMessage({ text: "Please wait, submitting form...", showSpinner: true }));

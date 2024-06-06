@@ -63,7 +63,10 @@ function FormCard3() {
   }, 0);
 
   return (
-    <Box sx={{ textAlign: "left", border: "0px solid #eee", }} pb={2} pt={0} maxWidth={500}>
+    <Box sx={{ textAlign: "left", border: "0px solid #eee", }} pb={2} pt={0} 
+    // pr={2} 
+    
+    >
       
       {/* <Typography variant="body1" color="text.secondary">
           Enter personal and conference information below
@@ -82,6 +85,7 @@ function FormCard3() {
       <FileUploadOutlined sx={{ color: 'action.active' }} fontSize='medium' />
 
         <Stack direction={"column"}>
+
           <Typography variant="subtitle2" color="text.primary" mt={0} mb={2} className='poppins-regular'>
             Upload up to 10 receipts. Each file must be a JPEG, PNG, or PDF and 20mb or less in size.
           </Typography>
@@ -98,6 +102,7 @@ function FormCard3() {
                   role={undefined}
                   tabIndex={-1}
                   variant="outlined"
+                  sx={{flexShrink: 0}}
                 >
                   Add file
                   {/* <VisuallyHiddenInput multiple type="file" onChange={(e) => {
@@ -116,7 +121,10 @@ function FormCard3() {
                       //   newFileLists.push(undefined);
                       // } htmlFileLists[huh.index] = huh.fileList;
                       contextDispatch({type: "form/chooseFile", payload: {fileList: newFileList, index: i}});
-                      contextDispatch({type: "form/addFileInput"});
+                      if (contextState.files.fileLists.length < 10) {
+                        contextDispatch({type: "form/addFileInput"});
+                      }
+                      
 
                       // dispatch(editFileLists({ fileName: newFileList.item(0)?.name, index: i }));
                       // dispatch(editFileLists({ fileName: undefined, index: i + 1 }));
