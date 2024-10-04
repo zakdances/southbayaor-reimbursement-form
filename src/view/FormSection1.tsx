@@ -1,7 +1,7 @@
 import { TextField, Stack, Box, Divider, Typography } from '@mui/material';
 import './../App.css';
 import { useAppDispatch, useAppSelector } from './../view model/hooks';
-import { editCity, editDateSubmitted, editMailingAddress, editPayTo, editStateName, editZip } from '../view model/reducers/form';
+import { editCity, editDateSubmitted, editEmailAddress, editMailingAddress, editPayTo, editStateName, editZip } from '../view model/reducers/form';
 import { DatePicker } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AccountBoxOutlined, AccountBoxTwoTone, LocalPostOfficeTwoTone, MailOutlined, MarkunreadMailboxOutlined, PersonOutlineOutlined } from '@mui/icons-material';
@@ -12,6 +12,7 @@ function FormSection1() {
   const dispatch = useAppDispatch();
 
   const val1 = useAppSelector(state => state.form.payTo);
+  const emailAddress = useAppSelector(state => state.form.emailAddress);
   const val2 = useAppSelector(state => state.form.dateSubmitted);
   const val3 = useAppSelector(state => state.form.mailingAddress);
   const val32 = useAppSelector(state => state.form.city);
@@ -106,7 +107,13 @@ function FormSection1() {
 
 
 
-
+      <TextField id="emailAddress" name="emailAddress" label="Email Address"
+          variant="outlined" size='medium' required
+          value={emailAddress ?? ""} sx={{ flexGrow: 1, flexBasis: 0, minWidth: 300, }}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            dispatch(editEmailAddress(event.target.value));
+          }}
+        />
 
 
       {/* <DatePicker label="Date Submitted *" 

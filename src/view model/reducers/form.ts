@@ -1,4 +1,5 @@
 import { createAction, createReducer, AnyAction, PayloadAction } from '@reduxjs/toolkit'
+import MeetingsAndEventsState from '../state/meetingsAndEvents';
 // import htmlFileLists from '../../util/htmlFileLists';
 // import JargonautCard, { JargonautCardData } from '../../model/JargonautCard'
 
@@ -6,8 +7,11 @@ interface FileInput {
   file?: string
 }
 
+
+
 interface formState {
   payTo: string,
+  emailAddress: string,
   dateSubmitted?: number,
   mailingAddress?: string,
   city?: string,
@@ -22,6 +26,8 @@ interface formState {
   mileage?: string,
   groundTransportation?: string,
   misc?: string,
+  meetingsAndEvents: MeetingsAndEventsState
+  miscComments: string,
   confirm: boolean,
   signature?: string,
   // fileList?: FileList,
@@ -31,11 +37,13 @@ interface formState {
 const initialState = {
   payTo: "",
   // dateSubmitted: 0,
+  meetingsAndEvents: {values: [""]},
   confirm: false,
   // fileLists: [undefined]
 } as formState;
 
 export const editPayTo = createAction<string>('editPayTo', );
+export const editEmailAddress = createAction<string>('editEmailAddress', );
 export const editDateSubmitted = createAction<number>('editDateSubmitted', );
 export const editMailingAddress = createAction<string>('editMailingAddress', );
 export const editCity = createAction<string>('editCity', );
@@ -50,6 +58,8 @@ export const editLuggage = createAction<string>('editLuggage', );
 export const editMileage = createAction<string>('editMileage', );
 export const editGroundTransportation = createAction<string>('editGroundTransportation', );
 export const editMisc = createAction<string>('editMisc', );
+export const editMeetingsAndEvents = createAction<MeetingsAndEventsState>('editMeetingsAndEvents', );
+export const editMiscComments = createAction<string>('editMiscComments', );
 export const editConfirm = createAction('editConfirm', );
 export const editSignature = createAction<string>('editSignature', );
 // export const editFileList = createAction<FileList>('editFileList', );
@@ -61,6 +71,9 @@ const formReducer = createReducer(initialState, (builder) => {
   builder
     .addCase(editPayTo, (state, action) => {
       state.payTo = action.payload
+    })
+    .addCase(editEmailAddress, (state, action) => {
+      state.emailAddress = action.payload
     })
     .addCase(editDateSubmitted, (state, action) => {
       state.dateSubmitted = action.payload
@@ -109,6 +122,12 @@ const formReducer = createReducer(initialState, (builder) => {
     })
     .addCase(editSignature, (state, action) => {
       state.signature = action.payload;
+    })
+    .addCase(editMeetingsAndEvents, (state, action) => {
+      state.meetingsAndEvents = action.payload;
+    })
+    .addCase(editMiscComments, (state, action) => {
+      state.miscComments = action.payload;
     })
     // .addCase(editFileList, (state, action) => {
     //   state.fileList = action.payload;

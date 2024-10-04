@@ -62,6 +62,8 @@ import NumberAvatar from './view/NumberAvatar';
 import FormCardHeader from './view/FormCardHeader';
 import { getCombinedNodeFlags } from 'typescript';
 import { Masonry } from '@mui/lab';
+import MeetingsAndEvents from './view/MeetingsAndEvents';
+import MiscComments from './view/MiscComments';
 // import htmlFileLists from './util/htmlFileLists';
 
 // const hostnameProdKeyword = "southbayaor";
@@ -372,6 +374,7 @@ function FormView() {
                   <FormCard3 />
                 </AccordionDetails>
               </Accordion>
+
               <Accordion defaultExpanded variant={cardVariant} elevation={1}>
                 <AccordionSummary
                   expandIcon={<ExpandMore fontSize='large' />}
@@ -379,7 +382,39 @@ function FormView() {
                   id="panel1-header"
                 >
                   {/* 1. Personal Info */}
-                  <Typography variant='h4' mb={0} ml={2}>4. Confirm and sign</Typography>
+                  <Typography variant='h4' mb={0} ml={2}>4. List Meetings and Events</Typography>
+                </AccordionSummary>
+                {/* <FormCardHeader title={"Upload Receipts"} avatarIcon={"3"} /> */}
+                <AccordionDetails sx={{ padding: 2 }}>
+                  {/* <Typography variant='h4' mb={2} ml={2}>3. Upload Receipts</Typography> */}
+                  <MeetingsAndEvents />
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion defaultExpanded variant={cardVariant} elevation={1}>
+                <AccordionSummary
+                  expandIcon={<ExpandMore fontSize='large' />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                >
+                  {/* 1. Personal Info */}
+                  <Typography variant='h4' mb={0} ml={2}>5. Comments</Typography>
+                </AccordionSummary>
+                {/* <FormCardHeader title={"Upload Receipts"} avatarIcon={"3"} /> */}
+                <AccordionDetails sx={{ padding: 2 }}>
+                  {/* <Typography variant='h4' mb={2} ml={2}>3. Upload Receipts</Typography> */}
+                  <MiscComments />
+                </AccordionDetails>
+              </Accordion>
+
+              <Accordion defaultExpanded variant={cardVariant} elevation={1}>
+                <AccordionSummary
+                  expandIcon={<ExpandMore fontSize='large' />}
+                  aria-controls="panel1-content"
+                  id="panel1-header"
+                >
+                  {/* 1. Personal Info */}
+                  <Typography variant='h4' mb={0} ml={2}>6. Confirm and sign</Typography>
                 </AccordionSummary>
                 {/* <FormCardHeader title={"Confirm and sign"} avatarIcon={"5"} /> */}
                 <AccordionDetails>
@@ -398,7 +433,7 @@ function FormView() {
 
 
             <Button type="submit" size="large" variant='contained' color='primary'
-              sx={{ flexGrow: 1, width: 300, }}
+              sx={{ flexGrow: 1, width: 300, ml: 2 }}
               disabled={contextState.network.request !== undefined}
               onClick={() => {
                 const myForm = document.getElementById("myForm") as HTMLFormElement | null;
