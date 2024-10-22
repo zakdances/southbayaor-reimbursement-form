@@ -2,6 +2,8 @@
 
 for South Bay Association of Realtors
 
+This app is a form which allows realtors to submit travel expenses for reimbursement.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
