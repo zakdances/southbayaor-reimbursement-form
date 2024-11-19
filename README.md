@@ -1,6 +1,6 @@
 # Web App form for SBAOR
 
-for South Bay Association of Realtors
+for the South Bay Association of Realtors organization.
 
 This app is a form which allows realtors to submit travel expenses for reimbursement.
 
