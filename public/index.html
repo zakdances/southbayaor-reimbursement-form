@@ -62,15 +62,16 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
-  <dialog id="reimbursement-form-outer-dialog">
+      
+  <!-- <dialog id="reimbursement-form-outer-dialog">
     <p id="ReimbursementOuterDialogBodyText">dialog message goes here</p>
 
     <div id="reimbursementOuterDialogSpinner"></div>
-    <!-- <button autofocus id="ReimbursementFormOuterDialogButton">Close</button> -->
     <form method="dialog" style="display: none" id="ReimbursementFormOuterDialogForm">
       <button type="submit" id="ReimbursementFormOuterDialogButton">Close</button>
     </form>
-  </dialog>
+  </dialog> -->
+
   <script>
 
 
@@ -81,6 +82,7 @@
       const dialogCloseButton = document.querySelector("dialog #ReimbursementFormOuterDialogButton");
       const dialogBodyText = document.querySelector("dialog #ReimbursementOuterDialogBodyText");
       const dialogSpinner = document.querySelector("dialog #reimbursementOuterDialogSpinner");
+
       // dialog.showModal();
 
       // function openCheck(dialog) {
@@ -102,7 +104,7 @@
       //   openCheck(dialog);
       // });
 
-      window.addEventListener('message', e => {
+      window.addEventListener('messagee', e => {
         // console.log(e.data);
         const key = e.message ? 'message' : 'data';
         const data = e[key];
@@ -130,7 +132,7 @@
             reimbursementFormOuterTimer = setTimeout(() => {
               dialogForm.style.display = "block";
               dialogBodyText.innerText = "Uh oh, this shouldn't take so long.";
-            }, 10000); // 10000 milliseconds = 10 seconds
+            }, 15000); // 10000 milliseconds = 10 seconds
           }
           // openCheck(dialog);
           // ...

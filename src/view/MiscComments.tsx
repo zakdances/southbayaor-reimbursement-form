@@ -69,7 +69,7 @@ function MiscComments() {
       <Stack gap={2} direction={"row"}>
       <CommentRounded sx={{ color: 'action.active' }} fontSize='medium' />
 
-        <Stack direction={"column"}>
+        <Stack direction={"column"} flexGrow={1} maxWidth={"29rem"}>
 
           <Typography variant="subtitle2" color="text.primary" mt={0} mb={2} className='poppins-regular'>
             Add any additional comments (optional).
@@ -79,7 +79,10 @@ function MiscComments() {
 
 
           <Stack direction={"column"} gap={2} sx={{ width: "100%" }}>
-            <TextField value={comments} label="Meeting/Event Name" required
+            <TextField value={comments} label="Comments"
+multiline
+minRows={4}
+maxRows={4}
             onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
               
               dispatch(editMiscComments(event.target.value));

@@ -70,7 +70,7 @@ function FormSection3() {
       </Stack>
 
       <CurrencyTextFieldFormControl fullWidth label={"Mileage if driving to meetings"}
-        value={val10 ?? ""} helperText={"$200 MAX @ $.67/mile"}
+        value={val10 ?? ""} helperText={"$200 MAX @ $.70/mile"}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           dispatch(editMileage(event.target.value));
         }}

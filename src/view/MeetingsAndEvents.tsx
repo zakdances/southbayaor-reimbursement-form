@@ -81,8 +81,9 @@ function MeetingsAndEvents() {
           <Stack direction={"column"} gap={2} sx={{ width: "100%" }}>
             <TextField value={values[0]} label="Meeting/Event Name" required
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                const splicedValues = values.length > 1 ? values.splice(1) : [];
-                dispatch(editMeetingsAndEvents({ values: [event.target.value, ...splicedValues] }));
+                const valuesCopy = [...values];
+                valuesCopy[0] = event.target.value;
+                dispatch(editMeetingsAndEvents({ values: valuesCopy }));
               }}
             ></TextField>
 

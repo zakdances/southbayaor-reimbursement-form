@@ -51,7 +51,17 @@ function App() {
     // prevDialogOpenValueRef.current = dialogOpen;
   }, [dialogOpen, dialogMessage]);
 
-  
+  // useEffect(() => {
+  //   console.log("component did mount");
+  //   const origin = "reimbursementFormIframe";
+  //   window.parent.postMessage({
+  //     bodyText: "dialog text", 
+  //     showSpinner: true, 
+  //     showCloseButton: true,
+  //     origin: origin}, "*");
+
+  // });
+
 
   return (
     <div className="App">
@@ -64,7 +74,7 @@ function App() {
       <FormView></FormView>
       </div>
 
-      <Dialog
+      {/* <Dialog
         open={dialogOpen ? false : false}
         TransitionComponent={Transition}
         keepMounted
@@ -80,11 +90,11 @@ function App() {
             <CircularProgress/>
           </Box>
         </DialogContent>
-        {/* <DialogActions>
-          <Button onClick={handleDialogClose}>Disagree</Button>
-          <Button onClick={handleDialogClose}>Agree</Button>
-        </DialogActions> */}
-      </Dialog>
+        <DialogActions>
+          <Button onClick={handleDialogClose}>close</Button>
+        </DialogActions>
+      </Dialog> */}
+      
     </div>
   );
 }

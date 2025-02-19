@@ -42,7 +42,7 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
 import './App.css';
 import { useAppDispatch, useAppSelector } from './view model/hooks';
-import { editAirfare, editConferenceName, editConfirm, editDateSubmitted, editGroundTransportation, editHotel, editLuggage, editMailingAddress, editMileage, editMisc, editPayTo, editSignature } from './view model/reducers/form';
+import { editAirfare, editCity, editConferenceName, editConfirm, editDateSubmitted, editEmailAddress, editGroundTransportation, editHotel, editLuggage, editMailingAddress, editMileage, editMisc, editPayTo, editSignature, editStateName, editZip } from './view model/reducers/form';
 import dayjs from 'dayjs';
 import CurrencyTextFieldFormControl from './view/CurrencyTextFieldFormControl';
 import numbro from 'numbro';
@@ -95,19 +95,6 @@ const getServerUrl = () => {
 );
 
   return isProd ? prod_server_url : dev_server_url;
-
-  if (
-    window.location.hostname.includes(hostnameProdKeyword) ||
-    window.parent?.location.hostname.includes(hostnameProdKeyword)) {
-    // Running locally
-    // console.log("Running locally");
-    return prod_server_url;
-  } else {
-    // Running on GitHub Pages or some other domain
-    // console.log("Running on GitHub Pages or another deployed environment");
-
-    return dev_server_url;
-  }
 }
 
 console.log(getServerUrl());
@@ -164,6 +151,9 @@ function FormView() {
           total += numToAdd;
         }
       }
+      if (k === 'meetingsAndEvents') {
+        v = v.values.join(", ");
+      }
 
       p[k] = v;
 
@@ -173,6 +163,7 @@ function FormView() {
 
     // Set text field values
     Object.entries(newFormState).forEach(([key, value]) => {
+
       formData.set(key, value as any);
     });
 
@@ -207,6 +198,14 @@ function FormView() {
         console.log(json);
         dispatch(editDialogMessage({ text: "Form submitted succesfully! Thank you.", showCloseButton: true }));
         dispatch(editDialogOpen(true));
+
+        dispatch(editPayTo(""));
+        dispatch(editMailingAddress(""));
+        dispatch(editCity(""));
+        dispatch(editStateName(""));
+        dispatch(editZip(""));
+        dispatch(editEmailAddress(""));
+        dispatch(editConferenceName(""));
       })
       .catch(function (error) {
         console.log(error);
@@ -231,35 +230,35 @@ function FormView() {
   }
 
 
-  const huh = [
-    {
-      title: "Personal Info",
-      component: <FormSection1 />
-    },
-    {
-      title: "Conference Info",
-      component: <FormSection2 />
-    },
-    {
-      title: "Expenses",
-      component: <FormSection3 />
-    },
-    {
-      title: "Upload Receipts",
-      component: <FormCard3 />
-    },
-    {
-      title: "Confirm and Sign",
-      component: <FormCard4 />
-    }
-  ]
+  // const huh = [
+  //   {
+  //     title: "Personal Info",
+  //     component: <FormSection1 />
+  //   },
+  //   {
+  //     title: "Conference Info",
+  //     component: <FormSection2 />
+  //   },
+  //   {
+  //     title: "Expenses",
+  //     component: <FormSection3 />
+  //   },
+  //   {
+  //     title: "Upload Receipts",
+  //     component: <FormCard3 />
+  //   },
+  //   {
+  //     title: "Confirm and Sign",
+  //     component: <FormCard4 />
+  //   }
+  // ]
 
   return (
     <div className="FormView" style={{ paddingTop: 0, paddingBottom: 32 }}>
       <form method="post" onSubmit={handleSubmit} id="myForm">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
 
-          <MainAppBar />
+          {/* <MainAppBar /> */}
 
 
           {/* <InfoCard /> */}
@@ -276,9 +275,9 @@ function FormView() {
         
             <Paper variant='elevation' sx={{ mb: 0 }}>
               <InfoCard />
-              <Box p={4}>
+              {/* <Box p={4}>
                 <Typography variant='h4' color={"primary"}>Travel Expenses Reimbursement Form</Typography>
-              </Box>
+              </Box> */}
             </Paper>
             <Paper component={"div"} variant='elevation' elevation={0} sx={{ bgcolor: "transparent" }}>
 
