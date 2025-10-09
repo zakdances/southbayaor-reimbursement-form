@@ -83,7 +83,7 @@ import MiscComments from './view/MiscComments';
 
 const getServerUrl = () => {
   const dev_server_url = "http://localhost:8080/";
-  const prod_server_url = "https://us-west1-southbayaor-422114.cloudfunctions.net/function-hello-world";
+  const prod_server_url = "https://us-west2-southbayaor-422114.cloudfunctions.net/process-form";
   const hostnameProdKeyword = "southbayaor";
 
   const isIframe = window.self !== window.top;
