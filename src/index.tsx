@@ -30,3 +30,19 @@ root.render(
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
 reportWebVitals();
+
+if (window.self !== window.top) {
+  const originalFocus = HTMLElement.prototype.focus;
+
+  HTMLElement.prototype.focus = function (this: HTMLElement, options?: FocusOptions): void {
+    // Check if the focus target is inside an MUI Picker popper or the calendar itself
+    const isMuiPicker = !!this.closest('.MuiPickersPopper-root, .MuiDateCalendar-root, .MuiYearCalendar-root');
+
+    if (isMuiPicker) {
+      return originalFocus.call(this, { ...options, preventScroll: true });
+    }
+
+    // Default behavior for standard form inputs
+    return originalFocus.call(this, options);
+  };
+}
