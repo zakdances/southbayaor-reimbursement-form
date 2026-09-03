@@ -1,0 +1,120 @@
+<!-- wp:html -->
+
+<iframe title="Reimbursement Form" id="form-iframe"
+    style="width: 100%; min-height: 600px; box-shadow: none !important; border: none; display: block;"
+    src="https://zakdances.github.io/southbayaor-reimbursement-form/" scrolling="no"></iframe>
+
+
+<style>
+    /*
+#pagetitle { display: none !important; }
+*/
+    .ct-breadcrumb {
+        display: none !important;
+    }
+
+    .site-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+</style>
+
+<style>
+    #reimbursementOuterDialogSpinner {
+        display: none;
+        border: 16px solid #f3f3f3;
+        /* Light grey */
+        border-top: 16px solid #3498db;
+        /* Blue */
+        border-radius: 50%;
+        width: 64px;
+        height: 64px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<dialog id="reimbursement-form-outer-dialog">
+    <p id="ReimbursementOuterDialogBodyText">
+
+    </p>
+
+    <div id="reimbursementOuterDialogSpinner"></div>
+    <form method="dialog" style="display: none" id="ReimbursementFormOuterDialogForm">
+        <button type="submit" id="ReimbursementFormOuterDialogButton">Close</button>
+    </form>
+</dialog>
+
+<script>(() => {
+        // var dialog = document.querySelector("dialog#reimbursement-form-outer-dialog");
+        // dialog.close();
+    })();</script>
+
+<script>(() => {
+        const dialog = document.querySelector("dialog#reimbursement-form-outer-dialog");
+        dialog.addEventListener("close", (event) => {
+            dialog.style.display = "none";
+        });
+    })();</script>
+
+<script>
+    (() => {
+        const iframe = document.querySelector("iframe#form-iframe");
+        const dialog = document.querySelector("dialog#reimbursement-form-outer-dialog");
+        const dialogForm = document.querySelector("dialog #ReimbursementFormOuterDialogForm");
+        const dialogBodyText = document.querySelector("dialog #ReimbursementOuterDialogBodyText");
+        const dialogSpinner = document.querySelector("dialog #reimbursementOuterDialogSpinner");
+        const allowedIframeOrigin = iframe ? new URL(iframe.src).origin : "";
+        let reimbursementFormOuterTimer = null;
+
+        window.addEventListener("message", event => {
+            if (event.origin !== allowedIframeOrigin) return;
+
+            const data = event.data || {};
+
+            if (data.source === "reimbursementFormIframe" && data.type === "resize") {
+                if (!iframe || !Number.isFinite(data.height)) return;
+
+                iframe.style.height = `${Math.ceil(data.height)}px`;
+                return;
+            }
+
+            if (data.origin !== "reimbursementFormIframe") return;
+            if (!dialog || !dialogForm || !dialogBodyText || !dialogSpinner) return;
+
+            dialog.style.display = "block";
+            if (!dialog.open) {
+                dialog.showModal();
+            }
+            dialogSpinner.style.display = "none";
+            dialogForm.style.display = "none";
+            clearTimeout(reimbursementFormOuterTimer);
+
+            dialogBodyText.innerText = data.bodyText;
+
+            if (data.showSpinner === true) {
+                dialogSpinner.style.display = "block";
+            }
+
+            if (data.showCloseButton === true) {
+                dialogForm.style.display = "block";
+            } else {
+                reimbursementFormOuterTimer = setTimeout(() => {
+                    dialogForm.style.display = "block";
+                    dialogBodyText.innerText = "Uh oh, this shouldn't take so long.";
+                }, 15000);
+            }
+        }, false);
+    })();
+</script>
+
+<!-- /wp:html -->

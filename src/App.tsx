@@ -7,6 +7,9 @@ import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, B
 import { useAppDispatch, useAppSelector } from './view model/hooks';
 import { editDialogOpen } from './view model/reducers/dialog';
 
+// Shared marker so the WordPress parent page can identify messages from this iframe.
+const MESSAGE_ORIGIN = "reimbursementFormIframe";
+
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & {
     children: React.ReactElement<any, any>;
@@ -26,6 +29,74 @@ function App() {
     dispatch(editDialogOpen(false));
   };
 
+  useEffect(() => {
+    if (window.self === window.top) return;
+
+    let animationFrameId: number | undefined;
+    let isMounted = true;
+    let lastHeight = -1;
+
+    const getDocumentHeight = () => Math.ceil(Math.max(
+      document.body.scrollHeight,
+      document.documentElement.scrollHeight,
+      document.body.offsetHeight,
+      document.documentElement.offsetHeight
+    ));
+
+    // Tell the parent page the iframe's current content height.
+    const sendHeight = () => {
+      const height = getDocumentHeight();
+
+      if (height === lastHeight) return;
+
+      lastHeight = height;
+      window.parent.postMessage({
+        height,
+        source: MESSAGE_ORIGIN,
+        type: 'resize',
+      }, '*');
+    };
+
+    // Batch resize notifications so rapid layout changes only send the latest height.
+    const scheduleSendHeight = () => {
+      if (!isMounted) return;
+
+      if (animationFrameId !== undefined) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+
+      animationFrameId = window.requestAnimationFrame(() => {
+        animationFrameId = undefined;
+        sendHeight();
+      });
+    };
+
+    scheduleSendHeight();
+
+    // Watch for dynamic layout changes inside the form, such as validation messages or expanded sections.
+    const resizeObserver = typeof ResizeObserver === 'undefined'
+      ? undefined
+      : new ResizeObserver(scheduleSendHeight);
+    resizeObserver?.observe(document.body);
+    resizeObserver?.observe(document.documentElement);
+
+    window.addEventListener('resize', scheduleSendHeight);
+    window.addEventListener('load', scheduleSendHeight);
+    document.fonts?.ready.then(scheduleSendHeight);
+
+    return () => {
+      isMounted = false;
+
+      if (animationFrameId !== undefined) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
+
+      resizeObserver?.disconnect();
+      window.removeEventListener('resize', scheduleSendHeight);
+      window.removeEventListener('load', scheduleSendHeight);
+    };
+  }, []);
+
   // const prevDialogOpenValueRef = useRef(dialogOpen);
   useEffect(() => {
     // Get the previous value from the ref
@@ -35,16 +106,16 @@ function App() {
     
 
     // Your logic here
-    const origin = "reimbursementFormIframe";
     // if (prevDialogOpenValueRef.current !== dialogOpen && dialogOpen === true) {
     //   window.parent.postMessage({bodyText: dialogMessage, origin: origin}, "*");
     // }
+    // Existing status-message channel used by the WordPress parent page to show dialog feedback.
     if (dialogOpen === true) {
       window.parent.postMessage({
         bodyText: dialogMessage.text, 
         showSpinner: dialogMessage.showSpinner, 
         showCloseButton: dialogMessage.showCloseButton,
-        origin: origin}, "*");
+        origin: MESSAGE_ORIGIN}, "*");
     }
     
 
