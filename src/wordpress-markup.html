@@ -88,7 +88,7 @@
                 return;
             }
 
-            if (data.origin !== "reimbursementFormIframe") return;
+            if (data.source !== "reimbursementFormIframe") return;
             if (!dialog || !dialogForm || !dialogBodyText || !dialogSpinner) return;
 
             dialog.style.display = "block";

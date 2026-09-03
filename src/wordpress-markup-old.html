@@ -1,0 +1,71 @@
+<!-- wp:html -->
+
+<iframe title="Reimbursement Form" id="form-iframe"
+    style="width: 100%; height: 3600px; box-shadow: none !important; border: none;"
+    src="https://zakdances.github.io/southbayaor-reimbursement-form/" scrolling="no"></iframe>
+
+
+<style>
+    /*
+#pagetitle { display: none !important; }
+*/
+    .ct-breadcrumb {
+        display: none !important;
+    }
+
+    .site-content {
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
+</style>
+
+<style>
+    #reimbursementOuterDialogSpinner {
+        display: none;
+        border: 16px solid #f3f3f3;
+        /* Light grey */
+        border-top: 16px solid #3498db;
+        /* Blue */
+        border-radius: 50%;
+        width: 64px;
+        height: 64px;
+        animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+
+<dialog id="reimbursement-form-outer-dialog">
+    <p id="ReimbursementOuterDialogBodyText">
+
+    </p>
+
+    <div id="reimbursementOuterDialogSpinner"></div>
+    <form method="dialog" style="display: none" id="ReimbursementFormOuterDialogForm">
+        <button type="submit" id="ReimbursementFormOuterDialogButton">Close</button>
+    </form>
+</dialog>
+
+<script>(() => {
+        // var dialog = document.querySelector("dialog#reimbursement-form-outer-dialog");
+        // dialog.close();
+    })();</script>
+
+<script>(() => {
+        const dialog = document.querySelector("dialog#reimbursement-form-outer-dialog");
+        dialog.addEventListener("close", (event) => {
+            dialog.style.display = "none";
+        });
+    })();</script>
+
+<script>(() => { let e = document.querySelector("dialog#reimbursement-form-outer-dialog"), o = document.querySelector("dialog #ReimbursementFormOuterDialogForm"); document.querySelector("dialog #ReimbursementFormOuterDialogButton"); let t = document.querySelector("dialog #ReimbursementOuterDialogBodyText"), l = document.querySelector("dialog #reimbursementOuterDialogSpinner"), r = null; window.addEventListener("message", s => { let i = s.message ? "message" : "data", n = s[i]; "reimbursementFormIframe" === n.origin && (e.showModal(), l.style.display = "none", o.style.display = "none", clearTimeout(r), t.innerText = n.bodyText, !0 === n.showSpinner && (l.style.display = "block"), !0 === n.showCloseButton ? o.style.display = "block" : r = setTimeout(() => { o.style.display = "block", t.innerText = "Uh oh, this shouldn't take so long." }, 15000)) }, !1) })();</script>
+
+<!-- /wp:html -->

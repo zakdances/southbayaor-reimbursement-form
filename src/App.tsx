@@ -35,13 +35,15 @@ function App() {
     let animationFrameId: number | undefined;
     let isMounted = true;
     let lastHeight = -1;
+    const container = document.getElementById('root') || document.querySelector('.App');
 
-    const getDocumentHeight = () => Math.ceil(Math.max(
-      document.body.scrollHeight,
-      document.documentElement.scrollHeight,
-      document.body.offsetHeight,
-      document.documentElement.offsetHeight
-    ));
+    const getDocumentHeight = () => {
+      if (container) {
+        const { bottom } = container.getBoundingClientRect();
+        return Math.ceil(bottom + window.scrollY);
+      }
+      return Math.ceil(document.body.scrollHeight);
+    };
 
     // Tell the parent page the iframe's current content height.
     const sendHeight = () => {
@@ -77,8 +79,7 @@ function App() {
     const resizeObserver = typeof ResizeObserver === 'undefined'
       ? undefined
       : new ResizeObserver(scheduleSendHeight);
-    resizeObserver?.observe(document.body);
-    resizeObserver?.observe(document.documentElement);
+    resizeObserver?.observe(container || document.body);
 
     window.addEventListener('resize', scheduleSendHeight);
     window.addEventListener('load', scheduleSendHeight);
@@ -115,7 +116,7 @@ function App() {
         bodyText: dialogMessage.text, 
         showSpinner: dialogMessage.showSpinner, 
         showCloseButton: dialogMessage.showCloseButton,
-        origin: MESSAGE_ORIGIN}, "*");
+        source: MESSAGE_ORIGIN}, "*");
     }
     
 
