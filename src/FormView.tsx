@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useRef } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import logo from './logo.svg';
@@ -106,7 +106,7 @@ const maxWidth = 880;
 const cardVariant = "elevation";
 
 type SubmissionResponse = {
-  status?: 'submitted' | 'saved_for_follow_up' | 'failed';
+  status?: 'submitted' | 'saved_for_delivery' | 'saved_for_follow_up' | 'failed';
   submissionId?: string;
   copySent?: boolean;
   name?: string;
@@ -138,6 +138,7 @@ function FormView() {
   const val14 = useAppSelector(state => state.form.signature);
 
   const { contextState, contextDispatch } = useContext(MainContext);
+  const lastAttempt = useRef<{ id: string; fields: string; receipts: File[] }>();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -175,10 +176,12 @@ function FormView() {
     });
 
     // Set image files for upload
+    const receipts: File[] = [];
     contextState.files.fileLists.forEach(v => {
       if (v) {
         const file = v.item(0);
         if (file) {
+          receipts.push(file);
           formData.append('files', file, file.name);
           console.log(file.size);
           // Check file size // 20 MB in bytes
@@ -196,14 +199,23 @@ function FormView() {
       return;
     }
 
-    // formData'fileLists'] = htmlFileLists;
+    const fields = JSON.stringify(newFormState);
+    const previous = lastAttempt.current;
+    const sameForm = previous?.fields === fields &&
+      previous.receipts.length === receipts.length &&
+      previous.receipts.every((receipt, index) => receipt === receipts[index]);
+    const submissionId = sameForm ? previous.id : window.crypto.randomUUID();
+    lastAttempt.current = { id: submissionId, fields, receipts };
+
     dispatch(editDialogMessage({ text: "Please wait, submitting form...", showSpinner: true }));
     dispatch(editDialogOpen(true));
 
-    const request = axios.post<SubmissionResponse>(getServerUrl(), formData)
+    const request = axios.post<SubmissionResponse>(getServerUrl(), formData, { params: { submissionId } })
       .then(({ data }) => {
         let text: string;
-        if (data?.status === 'saved_for_follow_up' && data.submissionId) {
+        if (data?.status === 'saved_for_delivery' && data.submissionId) {
+          text = `Your form and receipts were saved. The email will be sent separately. Your reference is ${data.submissionId}.`;
+        } else if (data?.status === 'saved_for_follow_up' && data.submissionId) {
           text = `Your form was saved for staff follow-up. We couldn't confirm the email was sent. Your reference is ${data.submissionId}.`;
         } else if (data?.status === 'submitted' || data?.name === 'Form submit done!') {
           text = data.copySent === false
@@ -214,6 +226,7 @@ function FormView() {
         }
         dispatch(editDialogMessage({ text, showCloseButton: true }));
         dispatch(editDialogOpen(true));
+        lastAttempt.current = undefined;
 
         dispatch(editPayTo(""));
         dispatch(editMailingAddress(""));
@@ -225,11 +238,9 @@ function FormView() {
       })
       .catch(error => {
         const data: SubmissionResponse | undefined = axios.isAxiosError(error) ? error.response?.data : undefined;
-        const reference = data?.status === 'failed' && data.submissionId
-          ? ` Your reference is ${data.submissionId}.`
-          : '';
+        const reference = data?.status === 'failed' && data.submissionId ? data.submissionId : submissionId;
         dispatch(editDialogMessage({
-          text: `We couldn't confirm that your form was saved. Your entries are still here. Please try again or contact South Bay Association of Realtors.${reference}`,
+          text: `We couldn't confirm that your form was saved. Your entries are still here. Please try again or contact South Bay Association of Realtors. Your reference is ${reference}.`,
           showCloseButton: true,
         }));
         dispatch(editDialogOpen(true));

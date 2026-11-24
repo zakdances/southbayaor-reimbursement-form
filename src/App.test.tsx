@@ -13,6 +13,11 @@ jest.mock('axios', () => ({
 
 const post = axios.post as jest.Mock;
 
+Object.defineProperty(window, 'crypto', {
+  configurable: true,
+  value: { randomUUID: require('crypto').randomUUID },
+});
+
 function submitForm() {
   store.dispatch(editPayTo('Test Submitter'));
   render(
@@ -28,6 +33,7 @@ function submitForm() {
 test.each([
   [{ status: 'submitted', copySent: true }, 'Form submitted successfully'],
   [{ status: 'submitted', copySent: false }, "We couldn't email you a copy"],
+  [{ status: 'saved_for_delivery', submissionId: 'saved-reference' }, 'saved-reference'],
   [{ status: 'saved_for_follow_up', submissionId: 'backup-reference' }, 'backup-reference'],
   [{ name: 'Form submit done!' }, 'Form submitted successfully'],
 ])('acknowledges a handled submission %#', async (data, message) => {
@@ -55,4 +61,17 @@ test('does not clear the form for an unexpected success response', async () => {
 
   await waitFor(() => expect(store.getState().dialog.message.text).toContain("couldn't confirm"));
   expect(store.getState().form.payTo).toBe('Test Submitter');
+});
+
+test('reuses the reference when the same form is retried', async () => {
+  post.mockClear();
+  post.mockRejectedValueOnce(new Error('Network interrupted'));
+  post.mockResolvedValueOnce({ data: { status: 'saved_for_delivery', submissionId: 'saved-reference' } });
+  submitForm();
+
+  await waitFor(() => expect(store.getState().dialog.message.text).toContain("couldn't confirm"));
+  fireEvent.submit(screen.getByRole('button', { name: 'Submit' }).closest('form')!);
+  await waitFor(() => expect(store.getState().dialog.message.text).toContain('saved-reference'));
+
+  expect(post.mock.calls[1][2].params.submissionId).toBe(post.mock.calls[0][2].params.submissionId);
 });
