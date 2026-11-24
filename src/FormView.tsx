@@ -105,6 +105,13 @@ console.log(getServerUrl());
 const maxWidth = 880;
 const cardVariant = "elevation";
 
+type SubmissionResponse = {
+  status?: 'submitted' | 'saved_for_follow_up' | 'failed';
+  submissionId?: string;
+  copySent?: boolean;
+  name?: string;
+};
+
 function FormView() {
 
   const dispatch = useAppDispatch();
@@ -193,10 +200,19 @@ function FormView() {
     dispatch(editDialogMessage({ text: "Please wait, submitting form...", showSpinner: true }));
     dispatch(editDialogOpen(true));
 
-    const request = axios.post(getServerUrl(), formData)
-      .then(json => {
-        console.log(json);
-        dispatch(editDialogMessage({ text: "Form submitted succesfully! Thank you.", showCloseButton: true }));
+    const request = axios.post<SubmissionResponse>(getServerUrl(), formData)
+      .then(({ data }) => {
+        let text: string;
+        if (data?.status === 'saved_for_follow_up' && data.submissionId) {
+          text = `Your form was saved for staff follow-up. We couldn't confirm the email was sent. Your reference is ${data.submissionId}.`;
+        } else if (data?.status === 'submitted' || data?.name === 'Form submit done!') {
+          text = data.copySent === false
+            ? "Your form was submitted. We couldn't email you a copy."
+            : "Form submitted successfully! Thank you.";
+        } else {
+          throw new Error('Unexpected submission response');
+        }
+        dispatch(editDialogMessage({ text, showCloseButton: true }));
         dispatch(editDialogOpen(true));
 
         dispatch(editPayTo(""));
@@ -207,9 +223,15 @@ function FormView() {
         dispatch(editEmailAddress(""));
         dispatch(editConferenceName(""));
       })
-      .catch(function (error) {
-        console.log(error);
-        dispatch(editDialogMessage({ text: "Form not submitted. There was an error.", showCloseButton: true }));
+      .catch(error => {
+        const data: SubmissionResponse | undefined = axios.isAxiosError(error) ? error.response?.data : undefined;
+        const reference = data?.status === 'failed' && data.submissionId
+          ? ` Your reference is ${data.submissionId}.`
+          : '';
+        dispatch(editDialogMessage({
+          text: `We couldn't confirm that your form was saved. Your entries are still here. Please try again or contact South Bay Association of Realtors.${reference}`,
+          showCloseButton: true,
+        }));
         dispatch(editDialogOpen(true));
       })
       .finally(() => {
